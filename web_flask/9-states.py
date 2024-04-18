@@ -1,43 +1,30 @@
 #!/usr/bin/python3
+"""Start web application with two routings
 """
-    Sript that starts a Flask web application
-"""
-from flask import Flask, render_template # type: ignore
+
 from models import storage
-import os
+from models.state import State
+from flask import Flask, render_template
 app = Flask(__name__)
 
 
-@app.teardown_appcontext
-def handle_teardown(self):
+@app.route('/states')
+@app.route('/states/<id>')
+def states_list(id=None):
+    """Render template with states
     """
-        method to handle teardown
+    path = '9-states.html'
+    states = storage.all(State)
+    return render_template(path, states=states, id=id)
+
+
+@app.teardown_appcontext
+def app_teardown(arg=None):
+    """Clean-up session
     """
     storage.close()
 
 
-@app.route('/states', strict_slashes=False)
-def state_list():
-    """
-        method to render states
-    """
-    states = storage.all('State').values()
-    return render_template("9-states.html", states=states,
-                           condition="states_list")
-
-
-@app.route('/states/<id>', strict_slashes=False)
-def states_id(id):
-    """
-        method to render state ids
-    """
-    state_all = storage.all('State')
-    try:
-        state_id = state_all[id]
-        return render_template('9-states.html', state_id=state_id,
-                               condition="state_id")
-    except:
-        return render_template('9-states.html', condition="not_found")
-
 if __name__ == '__main__':
-        app.run(host='0.0.0.0', port=5000)
+    app.url_map.strict_slashes = False
+    app.run(host='0.0.0.0', port=5000)
