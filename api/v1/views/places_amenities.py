@@ -5,8 +5,8 @@ from models.amenity import Amenity
 from models import storage
 from api.v1.views import app_views
 from os import environ
-from flask import abort, jsonify, make_response, request
-from flasgger.utils import swag_from
+from flask import abort, jsonify, make_response, request # type: ignore
+from flasgger.utils import swag_from # type: ignore
 
 
 @app_views.route('places/<place_id>/amenities', methods=['GET'],
