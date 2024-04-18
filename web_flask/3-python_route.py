@@ -1,46 +1,41 @@
 #!/usr/bin/python3
 """
-Script to start a Flask web application
-"""
-
+    Sript that starts a Flask web application
+ """
 from flask import Flask # type: ignore
-from urllib.parse import unquote
-
 app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-def hello_hbnb():
+def hello_hbn():
     """
-    Route to display 'Hello HBNB!'
+        function to return Hello HBNB!
     """
-    return 'Hello HBNB!'
+    return "Hello HBNB!"
 
 
 @app.route('/hbnb', strict_slashes=False)
-def display_hbnb():
+def hbnb():
     """
-    Route to display 'HBNB'
+        function to return HBNB
     """
-    return 'HBNB'
+    return "HBNB"
 
 
 @app.route('/c/<text>', strict_slashes=False)
-def display_c_text(text):
+def text_var(text):
     """
-    Route to display 'C ', followed by the value of the text variable
+        function to display text variable passed in
     """
-    return 'C {}'.format(unquote(text).replace('_', ' '))
+    return "C {}".format(text.replace("_", " "))
 
 
-@app.route('/python/', defaults={'text': 'is cool'}, strict_slashes=False)
+@app.route('/python', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
-def display_python_text(text):
+def text_var_python(text="is cool"):
     """
-    Route to display 'Python ', followed by the value of the text variable
+        function to display text variable, with default "is cool"
     """
-    return 'Python {}'.format(unquote(text).replace('_', ' '))
-
-
+    return "Python {}".format(text.replace("_", " "))
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+        app.run(host='0.0.0.0', port=5000)

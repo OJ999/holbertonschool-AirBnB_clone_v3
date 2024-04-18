@@ -1,37 +1,33 @@
 #!/usr/bin/python3
-"""This is the state class"""
+"""
+State Class from Models Module
+"""
+import os
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String
-from sqlalchemy.orm import relationship
-from os import environ
+from sqlalchemy.orm import relationship # type: ignore
+from sqlalchemy import Column, Integer, String, Float # type: ignore
+import models
+storage_type = os.environ.get('HBNB_TYPE_STORAGE')
 
 
 class State(BaseModel, Base):
-    """This is the class for State
-    Attributes:
-        __tablename__: name of MySQL table
-        name: input name
-    """
-    __tablename__ = 'states'
-    name = Column(String(128), nullable=False)
-
-    if environ['HBNB_TYPE_STORAGE'] == 'db':
-        cities = relationship('City', cascade='all, delete', backref='state')
+    """State class handles all application states"""
+    if storage_type == "db":
+        __tablename__ = 'states'
+        name = Column(String(128), nullable=False)
+        cities = relationship('City', backref='state', cascade='delete')
     else:
+        name = ''
+
+    if storage_type != 'db':
         @property
         def cities(self):
-            """Getter method for cities
-            Return: list of cities with state_id equal to self.id
             """
-            from models import storage
-            from models.city import City
-            # return list of City objs in __objects
-            cities_dict = storage.all(City)
-            cities_list = []
-
-            # copy values from dict to list
-            for city in cities_dict.values():
+            getter method, returns list of City objs from storage
+            linked to the current State
+            """
+            city_list = []
+            for city in models.storage.all("City").values():
                 if city.state_id == self.id:
-                    cities_list.append(city)
-
-            return cities_list
+                    city_list.append(city)
+            return city_list

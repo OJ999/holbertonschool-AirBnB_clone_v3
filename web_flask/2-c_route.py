@@ -1,37 +1,32 @@
 #!/usr/bin/python3
 """
-Script to start a Flask web application
-"""
-
-from flask import Flask
-from urllib.parse import unquote
-
+    Sript that starts a Flask web application
+ """
+from flask import Flask # type: ignore
 app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-def hello_hbnb():
+def hello_hbn():
     """
-    Route to display 'Hello HBNB!'
+        function to return Hello HBNB!
     """
-    return 'Hello HBNB!'
+    return "Hello HBNB!"
 
 
 @app.route('/hbnb', strict_slashes=False)
-def display_hbnb():
+def hbnb():
     """
-    Route to display 'HBNB'
+        function to return HBNB
     """
-    return 'HBNB'
+    return "HBNB"
 
 
 @app.route('/c/<text>', strict_slashes=False)
-def display_text(text):
+def text_var(text):
     """
-    Route to display 'C ' followed by the value of the text variable
+        function to display text variable passed in
     """
-    return 'C {}'.format(unquote(text).replace('_', ' '))
-
-
+    return "C {}".format(text.replace("_", " "))
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+        app.run(host='0.0.0.0', port=5000)
