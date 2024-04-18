@@ -1,64 +1,62 @@
 #!/usr/bin/python3
+"""Start web application with two routings
 """
-    Sript that starts a Flask web application
- """
-from flask import Flask, render_template # type: ignore
+
+from flask import Flask, render_template
 app = Flask(__name__)
 
 
-@app.route('/', strict_slashes=False)
-def hello_hbn():
+@app.route('/')
+def hello():
+    """Return string when route queried
     """
-        function to return Hello HBNB!
-    """
-    return "Hello HBNB!"
+    return 'Hello HBNB!'
 
 
-@app.route('/hbnb', strict_slashes=False)
+@app.route('/hbnb')
 def hbnb():
+    """Return string when route queried
     """
-        function to return HBNB
+    return 'HBNB'
+
+
+@app.route('/c/<text>')
+def c_is_fun(text):
+    """Return reformatted text
     """
-    return "HBNB"
+    return 'C ' + text.replace('_', ' ')
 
 
-@app.route('/c/<text>', strict_slashes=False)
-def text_var(text):
+@app.route('/python/')
+@app.route('/python/<text>')
+def python_with_text(text='is cool'):
+    """Reformat text based on optional variable
     """
-        function to display text variable passed in
+    return 'Python ' + text.replace('_', ' ')
+
+
+@app.route('/number/<int:n>')
+def number(n=None):
+    """Allow request if path variable is a valid integer
     """
-    return "C {}".format(text.replace("_", " "))
+    return str(n) + ' is a number'
 
 
-@app.route('/python/<text>', strict_slashes=False)
-def text_var_python(text="is cool"):
+@app.route('/number_template/<int:n>')
+def number_template(n):
+    """Retrieve template for request
     """
-        function to display text variable, with default "is cool"
+    path = '5-number.html'
+    return render_template(path, n=n)
+
+
+@app.route('/number_odd_or_even/<int:n>')
+def number_odd_or_even(n):
+    """Render template based on conditional
     """
-    return "Python {}".format(text.replace("_", " "))
+    path = '6-number_odd_or_even.html'
+    return render_template(path, n=n)
 
-
-@app.route('/number/<int:n>', strict_slashes=False)
-def var_num(n):
-        """
-             function to display a variable, but only if an int
-        """
-        return "{} is a number".format(n)
-
-
-@app.route('/number_template/<int:n>', strict_slashes=False)
-def var_num_template(n):
-        """
-            function to display number in html page
-        """
-        return render_template("5-number.html", n=n)
-
-
-@app.route('/number_odd_or_even/<int:n>', strict_slashes=False)
-def var_num_even_odd(n):
-        """
-            function to display even or odd number
-        """
-        return render_template("6-number_odd_or_even.html", n=n)
 if __name__ == '__main__':
-        app.run(host='0.0.0.0', port=5000)
+    app.url_map.strict_slashes = False
+    app.run(host='0.0.0.0', port=5000)
