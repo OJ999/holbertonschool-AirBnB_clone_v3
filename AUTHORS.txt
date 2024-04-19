@@ -1,0 +1,4 @@
+
+# This individual contributed to the hbnb project in this repository 
+
+Omar-Jaber <Omarj819@gmail.com>
